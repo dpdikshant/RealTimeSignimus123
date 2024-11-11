@@ -4,7 +4,10 @@ package com.signimusTask.Security;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import com.signimusTask.service.UserDetailsImpl;
 
 import java.util.Date;
 
@@ -26,6 +29,17 @@ public class JwtUtils {
                 .compact();
     }
 
+    
+    public String generateJwtToken(Authentication authentication) {
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .claim("id", userPrincipal.getId())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
     public String getUsernameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
@@ -34,8 +48,8 @@ public class JwtUtils {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (JwtException e) {
-            // Log error details
+        } catch (JwtException | IllegalArgumentException e) {
+            System.err.println("Invalid JWT token: " + e.getMessage());
         }
         return false;
     }

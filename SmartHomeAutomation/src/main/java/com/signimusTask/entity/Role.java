@@ -1,5 +1,8 @@
 package com.signimusTask.entity;
 
+
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,8 +16,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole name;
+    @Column(unique = true)
+    private String name;
 
 	public Long getId() {
 		return id;
@@ -24,14 +27,15 @@ public class Role {
 		this.id = id;
 	}
 
-	public UserRole getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(UserRole name) {
+	public void setName(String name) {
 		this.name = name;
 	}
-    
+
+
     
     
 }

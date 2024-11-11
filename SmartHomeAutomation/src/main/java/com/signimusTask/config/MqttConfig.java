@@ -156,6 +156,11 @@ public class MqttConfig {
     public String getClientId() {
         return clientId;
     }
+    
+    @Bean
+    public MessageChannel mqttDeviceControlOutputChannel() {
+        return new DirectChannel();
+    }
 
 }
 

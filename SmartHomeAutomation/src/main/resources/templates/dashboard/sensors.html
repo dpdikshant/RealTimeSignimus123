@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensors - Smart Home Automation</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="base :: content">
+    <h2 class="mt-4">Sensor Data</h2>
+    <div class="row mt-3">
+        <div class="col-md-4" th:each="sensor : ${sensors}">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${sensor.name}">Sensor Name</h5>
+                    <p class="card-text">Type: <span th:text="${sensor.type}">Temperature</span></p>
+                    <p class="card-text">Location: <span th:text="${sensor.location}">Living Room</span></p>
+                    <p class="card-text">Value: <span th:text="${sensor.value}">0</span></p>
+                    <p class="card-text" th:if="${sensor.alert}">Alert: <span th:text="${sensor.alertMessage}">High Temperature</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

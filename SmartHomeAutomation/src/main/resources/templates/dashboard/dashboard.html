@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Home Automation</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="base :: content">
+    <h2 class="mt-4">Dashboard</h2>
+    <div class="row mt-3">
+        <div class="col-md-4" th:each="device : ${devices}">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${device.name}">Device Name</h5>
+                    <p class="card-text">Status: <span th:text="${device.status}">Off</span></p>
+                    <button class="btn btn-primary" onclick="toggleDevice([[${device.id}]])">Toggle</button>
+                    <button class="btn btn-secondary" onclick="showDeviceDetails([[${device.id}]])">Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function toggleDevice(deviceId) {
+        try {
+            const response = await fetch(`/api/devices/${deviceId}/toggle`, { method: 'POST' });
+            const result = await response.json();
+            alert(result.message);
+            location.reload(); // Reload the page to update the device status
+        } catch (error) {
+            console.error('Error toggling device:', error);
+        }
+    }
+
+    async function showDeviceDetails(deviceId) {
+        window.location.href = `/devices/${deviceId}`;
+    }
+</script>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
